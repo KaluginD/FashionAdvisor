@@ -16,6 +16,23 @@ export_file_name = 'export.pkl'
 # classes = ['black', 'grizzly', 'teddys']
 path = Path(__file__).parent
 
+
+
+new_codes = ['null','bag','belt','boots','footwear','outer','dress','sunglasses','pants','top','shorts','skirt','headwear','scarf & tie']
+name2id = {v:k for k,v in enumerate(new_codes)}
+void_code = name2id['null']
+
+def acc_camvid(input, target):
+    target = target.squeeze(1)
+    mask = target != void_code
+    return (input.argmax(dim=1)[mask]==target[mask]).float().mean()
+
+
+
+
+
+
+
 app = Starlette()
 app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_headers=['X-Requested-With', 'Content-Type'])
 app.mount('/static', StaticFiles(directory='app/static'))
@@ -45,6 +62,9 @@ tasks = [asyncio.ensure_future(setup_learner())]
 learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
 loop.close()
 
+
+
+
 @app.route('/')
 def index(request):
     html = path/'view'/'index.html'
@@ -55,7 +75,17 @@ async def analyze(request):
     data = await request.form()
     img_bytes = await (data['file'].read())
     img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
+    img.resize((3, 600, 400))
+    
+    
+    
+    prediction = learn.predict(img)
+    
+    from your_script import separate_clothes
+    list_of_clothes = separate_clothes(prediction)
+    print(type(prediction))
+    print(prediction)
+    np.save('predictions.npy', prediction[1])
     # return JSONResponse({'result': str(prediction)})
     return JSONResponse({'result': 0})
 
