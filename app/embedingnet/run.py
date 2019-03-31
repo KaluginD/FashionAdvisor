@@ -104,50 +104,6 @@ if os.path.isfile(args.resume):
                 .format(args.resume, checkpoint['epoch']))
 else:
         print("=> no checkpoint found at '{}'".format(args.resume))
-        
-old_codes = [
- 'null',
- 'bag',
- 'belt',
- 'boots',
- 'footwear',
- 'outer',
- 'dress',
- 'sunglasses',
- 'pants',
- 'top',
- 'shorts',
- 'skirt',
- 'headwear',
- 'scarf & tie']
-
-new_codes = ['tops',
- 'shoes',
- 'all-body',
- 'scarves',
- 'outerwear',
- 'accessories',
- 'hats',
- 'bags',
- 'bottoms',
- 'sunglasses']
-
-matches = {
- 'bag':'bags',
- 'belt':'accessories',
- 'boots':'shoes',
- 'footwear':'shoes',
- 'outer':'outerwear',
- 'dress':'all-body',
- 'sunglasses':'sunglasses',
- 'pants':'bottoms',
- 'top':'tops',
- 'shorts':'bottoms',
- 'skirt':'bottoms',
- 'headwear':'hats',
- 'scarf & tie':'scarves'}
-
-old_code_to_new_and_name = {i + 1 : (new_codes.index(matches[name]) + 1, matches[name]) for i, name in enumerate(old_codes[1:])}
 
 
 im = Image.open("./0000731.jpg")
