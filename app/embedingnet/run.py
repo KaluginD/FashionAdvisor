@@ -114,6 +114,8 @@ def main(curr_path="./0000731.jpg"):
     maskarr=np.array(mask).squeeze()
     cloth_images = get_parts_by_mask(imarr, maskarr)
 
+    for i in cloth_images:
+        i[0].save('../static/upload/curr_{}'.format(i[1]))
     cloth = list(filter(lambda i: i[1]=='tops', cloth_images))[0]
     torch.manual_seed(1)
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
